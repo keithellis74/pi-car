@@ -1,17 +1,17 @@
-'''Test motor driver with 4 LED's to represent two motors
-forward and reverse.
+# Test motor driver with 4 LED's to represent two motors
+# forward and reverse.
 
-By Keith Ellis
+# By Keith Ellis
 
-Original version required input from terminal as an input command
+# Original version required input from terminal as an input command
 
-Rev 01 - 03/01/2014
-Trying input from terminal stdin without haveing to press return
-Rev 02 - 07/01/2014
-Impliment PWM so that turning is slower and speeed is incremential
-Impliment drive_motor() function, this receives ducty cycle and pins to 
-set high to drive motors in desired direction
-'''
+# Rev 01 - 03/01/2014
+# Trying input from terminal stdin without haveing to press return
+# Rev 02 - 07/01/2014
+# Impliment PWM so that turning is slower and speeed is incremential
+# Impliment drive_motor() function, this receives ducty cycle and pins to 
+# set high to drive motors in desired direction
+
 
 
 
@@ -19,11 +19,11 @@ import RPi.GPIO as GPIO
 import time
 import sys,tty,termios
 
-''' 	GPIO output pins in pairs are
-	Left motor, pins 23 & 7
-	Right motor, pins 24 & 8
-'''
-# Setup GPIO output pins
+# 	GPIO output pins in pairs are
+#	Left motor, pins 23 & 7
+#	Right motor, pins 24 & 8
+
+# 	Setup GPIO output pins
  
 gpio_pins = {'leftMotorPin1' : 23, 'leftMotorPin2' : 7, 'rightMotorPin1' : 24,'rightMotorPin2' : 8}
 
@@ -44,14 +44,13 @@ lm2 = GPIO.PWM(gpio_pins['leftMotorPin2'], frequency)
 rm1 = GPIO.PWM(gpio_pins['rightMotorPin1'], frequency)	
 rm2 = GPIO.PWM(gpio_pins['rightMotorPin2'], frequency)
 
+
+# List to hold PWM variables
 pwm=[lm1, lm2, rm1, rm2]
 
-for number in pwm:
-	number.start(0)
-
-
-''' Functions to control movement of robot.  Inc. stop, forward,
- reverse, fast left, fast right, slow left, slow right '''
+# Start PWM on all four pins
+for pin in pwm:
+	pin.start(0)
 
 
 # The getch method can determine which key has been pressed
@@ -90,11 +89,20 @@ def drive_motor(dc,motors):
 			time.sleep(0.01)
 
 
+# Main programm - First call stop() to ensure all pins are Low
+
 stop()
+
+# Print control keys to screen as instructions to user
+
 print ("Program Running, use the following keys to control")
 print ("1 = Quit \nq = forward\na = reverse\nz = stop\n")
 print ("\nu = slow left\n[ = slow right")
 print ("o = fast left\np = fast right")
+
+
+# Get commands from user and send instructions to drive_motor() function
+
 while True:
 	n = getch()
 	n = n.lower()
